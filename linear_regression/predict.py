@@ -1,6 +1,5 @@
 '''module to predict the price of a car based on the mileage'''
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pandas as pd
 import numpy as np
 import json
@@ -19,9 +18,16 @@ class PredictionService:
         self.df = pd.read_csv('data/data.csv')
         self.theta0, self.theta1 = self.getTheta()
         self.users_prediction = self.getUsersPrediction()
-        self.predicted_price = self.theta0 + self.theta1 * self.users_prediction
-        print(f'The predicted price of the car is: {self.predicted_price}$')
+        self.predicted_price = self.calculatePredictedPrice()
         self.plotData()
+
+    def calculatePredictedPrice(self) -> float:
+        '''returns the predicted price of the car'''
+        predicted_price = self.theta0 + self.theta1 * self.users_prediction
+        if predicted_price < 0:
+            raise ValueError('The predicted price is too big')
+        print(f'The predicted price of the car is: {predicted_price}$')
+        return predicted_price
 
     def getTheta(self) -> tuple:
         '''returns the theta0 and theta1 values from the model'''
@@ -39,7 +45,7 @@ class PredictionService:
 
     def plotData(self) -> None:
         '''plots the data points in the data.csv file'''
-        # mpl.use('Qt5Agg') # needed for virtual environment
+
         line = np.array([0, - self.theta0 / self.theta1])
         plt.plot(line, self.theta0 + self.theta1 * line, 'r')
         plt.plot(self.df['km'], self.df['price'], 'o')
