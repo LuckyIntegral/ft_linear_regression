@@ -70,13 +70,14 @@ class PredictionService:
 def main() -> None:
     '''entrypoint of the script
     prompts the user to enter the mileage of the car
-    then predicts the price of the car based on theta0 and theta1 from the model
+    predicts the price of the car based on theta0 and theta1 from the model
     '''
     try:
         prediction_service = PredictionService()
         prediction_service.start()
     except Exception as e:
         print(e)
+
 
 if __name__ == '__main__':
     main()
