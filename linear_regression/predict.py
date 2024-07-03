@@ -15,11 +15,18 @@ class PredictionService:
         self.predicted_price = 0
 
     def start(self) -> None:
+        '''starts the prediction service'''
         self.df = pd.read_csv('data/data.csv')
         self.theta0, self.theta1 = self.getTheta()
         self.users_prediction = self.getUsersPrediction()
         self.predicted_price = self.calculatePredictedPrice()
+        self.print_precision()
         self.plotData()
+
+    def print_precision(self) -> None:
+        '''prints the precision of the model'''
+        precision = 1 - np.sum((self.df['price'] - self.theta0 - self.theta1 * self.df['km']) ** 2) / np.sum((self.df['price'] - np.mean(self.df['price'])) ** 2)
+        print(f'The precision of the model is: {precision * 100:.2f}%')
 
     def calculatePredictedPrice(self) -> float:
         '''returns the predicted price of the car'''
